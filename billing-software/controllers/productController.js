@@ -13,3 +13,15 @@ exports.getAllProducts = async (req, res) => {
         res.status(500).json({ error: 'Error fetching products' });
     }
 };
+
+exports.createProduct = async (req, res) => {
+    const { name, barcode, price, stock_quantity} = req.body;
+  
+
+      await db.query(
+        'INSERT INTO products (name, barcode, price, stock_quantity) VALUES (?, ?, ?, ?)',
+        [name, barcode, price, stock_quantity]
+      );
+      res.status(201).json({ message: 'Product created successfully.' });
+
+  };
