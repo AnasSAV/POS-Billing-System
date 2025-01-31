@@ -25,3 +25,17 @@ exports.createProduct = async (req, res) => {
       res.status(201).json({ message: 'Product created successfully.' });
 
   };
+
+exports.updateProduct = async (req, res) => {
+    const { id, price, stock_quantity } = req.body;
+
+    try {
+        await db.query(
+        'UPDATE products SET price = ?, stock_quantity = ? WHERE id = ?',
+        [price, stock_quantity, id]
+        );
+        res.json({ message: 'Product updated successfully.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error.', error });
+}
+};
