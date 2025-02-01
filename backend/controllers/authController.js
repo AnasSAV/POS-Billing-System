@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../db').default;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -19,7 +19,7 @@ exports.register = async (req, res) => {
 // User Login
 exports.login = async (req, res) => {
     const { username, password } = req.body;
-    try {
+
         const [users] = await db.query('SELECT * FROM Users WHERE username = ?', [username]);
         if (users.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
 
@@ -29,7 +29,5 @@ exports.login = async (req, res) => {
 
         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
-    } catch (error) {
-        res.status(500).json({ error: 'Error logging in' });
-    }
+
 };

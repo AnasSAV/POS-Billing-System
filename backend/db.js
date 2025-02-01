@@ -1,18 +1,14 @@
 require('dotenv').config();
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
-// Create a connection pool
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'billing_system',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
 
-// Export a promise-based connection
-const promisePool = pool.promise();
-
-module.exports = promisePool;
+module.exports = pool;  // Export using CommonJS

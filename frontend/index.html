@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Billing System</title>
+</head>
+<body>
+    <h1>Billing System Login</h1>
+
+    <div id="loginForm">
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <button onclick="login()">Login</button>
+    </div>
+
+    <h2>Product List</h2>
+    <button onclick="fetchProducts()">Fetch Products</button>
+    <div id="productList"></div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
