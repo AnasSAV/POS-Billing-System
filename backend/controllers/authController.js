@@ -1,7 +1,8 @@
-const db = require('../db').default;
+const db = require('../db');  // Ensure correct import
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
 
 // User Registration
 exports.register = async (req, res) => {
