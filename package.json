@@ -8,6 +8,7 @@
     "electron": "^34.0.2"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
     "sqlite3": "^5.1.7"
   }
 }

@@ -8,7 +8,9 @@ app.whenReady().then(() => {
         width: 1200,
         height: 800,
         webPreferences: {
-            nodeIntegration: true
+            preload: path.join(__dirname, "preload.js"),  
+            enableRemoteModule: false,
+            nodeIntegration: false
         }
     });
 
@@ -16,7 +18,7 @@ app.whenReady().then(() => {
     mainWindow.loadFile(path.join(__dirname, "frontend/login.html"));
 
     ipcMain.on("login-success", () => {
-        console.log("🔹 Received login-success event! Redirecting to POS system...");
+        console.log("🔹 Received 'login-success' event! Redirecting to POS system...");
         mainWindow.loadFile(path.join(__dirname, "frontend/index.html"));
     });
 });
