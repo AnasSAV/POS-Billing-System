@@ -1,63 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS Billing System</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <div class="container">
-        <!-- Search Bar -->
-        <div class="search-bar">
-            <input type="text" id="search" placeholder="Search products by name" onkeyup="searchProduct()">
+    <div class="pos-container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="left-controls">
+                <button class="icon-btn">☀</button>
+                <button class="icon-btn">≡</button>
+                <button class="icon-btn">#</button>
+                <button class="icon-btn">🏷</button>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search products by name">
+            </div>
         </div>
 
-        <!-- Product List Table -->
-        <div class="product-list">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody id="productTableBody">
-                    <tr>
-                        <td colspan="4" class="no-items">No items</td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Products Table -->
+            <div class="products-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsBody">
+                        <!-- Products will be added here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="right-sidebar">
+                <div class="function-buttons">
+                    <button class="fn-btn" data-key="F3"><span>F3</span>Delete</button>
+                    <button class="fn-btn" data-key="F4"><span>F4</span>Search</button>
+                    <button class="fn-btn" data-key="F8"><span>F8</span>Quantity</button>
+                    <button class="fn-btn"><span>F12</span>New sale</button>
+                </div>
+                
+                <div class="payment-methods">
+                    <button class="payment-btn">Cash</button>
+                    <button class="payment-btn">Credit Card</button>
+                    <button class="payment-btn">Debit Card</button>
+                    <button class="payment-btn">Check</button>
+                    <button class="payment-btn">Voucher</button>
+                    <button class="payment-btn">Gift Card</button>
+                </div>
+
+                <div class="logo-area">
+                    <!-- Logo will go here -->
+                </div>
+            </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="actions">
-            <button onclick="newSale()">➕ New Sale</button>
-            <button onclick="voidOrder()">❌ Void Order</button>
-            <button onclick="saveSale()">💾 Save Sale</button>
-            <button onclick="applyDiscount()">💲 Discount</button>
-            <button onclick="checkout()">💳 Payment</button>
-        </div>
-
-        <!-- Payment Options -->
-        <div class="payment-methods">
-            <button onclick="payWithCash()">💵 Cash</button>
-            <button onclick="payWithCard()">💳 Card</button>
-            <button onclick="payWithVoucher()">🎟️ Voucher</button>
-            <button onclick="payWithGiftCard()">🎁 Gift Card</button>
-        </div>
-
-        <!-- Subtotal, Tax & Total -->
-        <div class="total-summary">
-            <div>Subtotal: <span id="subtotal">0.00</span></div>
-            <div>Tax: <span id="tax">0.00</span></div>
-            <div class="total">Total: <span id="total">0.00</span></div>
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="bottom-buttons">
+                <button class="fn-btn" data-key="F2"><span>F2</span>Discount</button>
+                <button class="fn-btn"><span>💬</span>Comment</button>
+                <button class="fn-btn"><span>👤</span>Customer</button>
+                <button class="fn-btn"><span>💰</span>Cash drawer</button>
+            </div>
+            <div class="totals">
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <span>0.00</span>
+                </div>
+                <div class="total-row">
+                    <span>Tax</span>
+                    <span>0.00</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total</span>
+                    <span>0.00</span>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn save">F9 Save sale</button>
+                <button class="action-btn refund">Refund</button>
+                <button class="action-btn payment">F10 Payment</button>
+            </div>
         </div>
     </div>
-
-    <script src="renderer.js"></script>
+    <script src="pos.js"></script>
 </body>
 </html>
