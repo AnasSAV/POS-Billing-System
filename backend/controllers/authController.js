@@ -1,4 +1,4 @@
-const db = require('../db');  // Ensure correct import
+const db = require('../db').default;  // Ensure correct import
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
