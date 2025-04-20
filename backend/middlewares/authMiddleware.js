@@ -4,14 +4,29 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const authMiddleware = (req, res, next) => {
-    const token = req.header('Authorization');
-    if (!token) return res.status(403).json({ error: 'Access denied' });
-
     try {
-        const verified = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = verified;
-        next();
+        const authHeader = req.headers.authorization;
+        
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'No token provided' });
+        }
+
+        const token = authHeader.split(' ')[1];
+        
+        if (!token) {
+            return res.status(401).json({ error: 'No token provided' });
+        }
+
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            req.user = decoded;
+            next();
+        } catch (error) {
+            console.error('Token verification failed:', error);
+            return res.status(401).json({ error: 'Invalid token' });
+        }
     } catch (error) {
-        res.status(400).json({ error: 'Invalid token' });
+        console.error('Auth middleware error:', error);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };

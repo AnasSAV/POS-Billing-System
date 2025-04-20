@@ -34,10 +34,10 @@ export const login = async (req, res) => {
             { expiresIn: '1h' }
         );
         
-        res.json({ token });
+        res.json({ token, user: { id: user.id, username: user.username, role: user.role } });
     } catch (error) {
         console.error('Login error:', error);
-        //res.status(500).json({ error: 'Error during login' });
+        res.status(500).json({ error: 'Error during login' });
     }
 };
 

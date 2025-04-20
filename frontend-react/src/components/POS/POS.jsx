@@ -13,6 +13,15 @@ const POS = () => {
         total: 0
     });
 
+    const handleProductsFound = (products) => {
+        const newItems = products.map(product => ({
+            ...product,
+            quantity: 1
+        }));
+        setItems(newItems);
+        updateTotals(newItems);
+    };
+
     const updateTotals = (items) => {
         const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const tax = subtotal * 0.1;
@@ -28,7 +37,7 @@ const POS = () => {
             <TopBar />
             <Box sx={{ display: 'flex', flex: 1 }}>
                 <ProductTable items={items} setItems={setItems} updateTotals={updateTotals} />
-                <Sidebar />
+                <Sidebar onProductsFound={handleProductsFound} />
             </Box>
             <BottomBar totals={totals} />
         </Box>
