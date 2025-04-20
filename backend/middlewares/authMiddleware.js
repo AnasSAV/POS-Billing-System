@@ -1,7 +1,9 @@
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-exports.authMiddleware = (req, res, next) => {
+dotenv.config();
+
+export const authMiddleware = (req, res, next) => {
     const token = req.header('Authorization');
     if (!token) return res.status(403).json({ error: 'Access denied' });
 

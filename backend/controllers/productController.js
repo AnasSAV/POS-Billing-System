@@ -1,39 +1,34 @@
-const db = require('../db').default;  
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+import pool from '../db.js';
 
-exports.getAllProducts = async (req, res) => {
+export const getAllProducts = async (req, res) => {
     try {
-        const searchQuery = req.query.search ? `%${req.query.search}%` : '%';
+        const { search } = req.query;
+        let query = 'SELECT * FROM products';
+        let params = [];
 
-        const [products] = await db.query(
-            'SELECT * FROM Products WHERE name LIKE ?',
-            [searchQuery]
-        );
+        if (search) {
+            query += ' WHERE name ILIKE $1';
+            params.push(`%${search}%`);
+        }
 
-        res.json(products);
+        const result = await pool.query(query, params);
+        res.json(result.rows);
     } catch (error) {
-        console.error("❌ Error fetching products:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error('Error getting products:', error);
+        res.status(500).json({ error: 'Error fetching products' });
     }
 };
 
-exports.createProduct = async (req, res) => {
-    const { name, barcode, price, stock_quantity } = req.body;
-
-    if (!name || !barcode || !price || !stock_quantity) {
-        return res.status(400).json({ error: "All fields are required." });
-    }
-
+export const createProduct = async (req, res) => {
     try {
-        await db.query(
-            'INSERT INTO products (name, barcode, price, stock_quantity) VALUES (?, ?, ?, ?)',
+        const { name, barcode, price, stock_quantity } = req.body;
+        const result = await pool.query(
+            'INSERT INTO products (name, barcode, price, stock_quantity) VALUES ($1, $2, $3, $4) RETURNING *',
             [name, barcode, price, stock_quantity]
         );
-
-        res.status(201).json({ message: "✅ Product created successfully." });
+        res.status(201).json(result.rows[0]);
     } catch (error) {
-        console.error("❌ Error creating product:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error('Error creating product:', error);
+        res.status(500).json({ error: 'Error creating product' });
     }
 };
