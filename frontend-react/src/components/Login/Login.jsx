@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography, Container } from '@mui/material';
+import { loginUser } from '../../services/api';
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -10,20 +11,15 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(credentials)
-            });
-
-            const data = await response.json();
-            if (response.ok) {
+            const data = await loginUser(credentials);
+            if (data.token) {
                 localStorage.setItem('token', data.token);
                 navigate('/pos');
             } else {
-                setError(data.error);
+                setError(data.error || 'Login failed');
             }
         } catch (error) {
+            console.error('Login error:', error);
             setError('Server connection failed');
         }
     };
