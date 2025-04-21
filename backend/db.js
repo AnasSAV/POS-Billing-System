@@ -10,7 +10,6 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   port: process.env.DB_PORT || 5000
 });
-console.log("Database Password:", process.env.DB_PASSWORD);
 (async () => {
   try {
     const client = await pool.connect();
