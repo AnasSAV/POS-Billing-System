@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import transactionRoutes from './routes/transactionRoutes.js';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 // Register Routes
 app.use('/api/auth', authRoutes);
 app.use('/api', productRoutes);
+app.use('/api', transactionRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
