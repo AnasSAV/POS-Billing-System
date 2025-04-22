@@ -18,8 +18,8 @@ const POS = () => {
             ...product,
             quantity: 1
         }));
-        setItems(newItems);
-        updateTotals(newItems);
+        setItems(prevItems => [...prevItems, ...newItems]);
+        updateTotals([...items, ...newItems]);
     };
 
     const updateTotals = (items) => {
@@ -39,7 +39,7 @@ const POS = () => {
                 <ProductTable items={items} setItems={setItems} updateTotals={updateTotals} />
                 <Sidebar onProductsFound={handleProductsFound} />
             </Box>
-            <BottomBar totals={totals} />
+            <BottomBar items={items} totals={totals} />
         </Box>
     );
 };

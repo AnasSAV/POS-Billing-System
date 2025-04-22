@@ -37,3 +37,30 @@ export const getProducts = async (token, search = '') => {
         throw error;
     }
 };
+
+export const createTransaction = async (transactionData, token) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/transactions-create`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(transactionData)
+        });
+
+        if (response.status === 401) {
+            throw new Error('Invalid token');
+        }
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to create transaction');
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error('Transaction API Error:', error);
+        throw error;
+    }
+};
