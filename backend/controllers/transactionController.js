@@ -1,3 +1,5 @@
+import pool from '../db.js';
+
 export const createTransaction = async (req, res) => {
     const client = await pool.connect();
 
@@ -41,12 +43,10 @@ export const createTransaction = async (req, res) => {
 
         // Commit transaction
         await client.query('COMMIT');
-
         res.status(201).json({ message: 'Transaction completed', transactionId });
-
     } catch (error) {
         await client.query('ROLLBACK');
-        console.error('Transaction error:', error);
+        console.error('❌ Transaction error:', error.message, error.stack);
         res.status(500).json({ error: 'Failed to create transaction' });
     } finally {
         client.release();
