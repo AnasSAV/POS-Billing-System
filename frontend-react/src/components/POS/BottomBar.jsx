@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { createTransaction } from '../../services/api';
 
-const BottomBar = ({ items, totals }) => {
+const BottomBar = ({ items, totals, onTransactionComplete }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
@@ -40,13 +40,17 @@ const BottomBar = ({ items, totals }) => {
 
             await createTransaction(transactionData, token);
             setSuccess(true);
-            // Clear cart or redirect to new transaction
+            onTransactionComplete(); // Clear the cart after successful transaction
         } catch (error) {
             setError(error.message);
             console.error('Checkout error:', error);
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleCloseDialog = () => {
+        setSuccess(false);
     };
 
     return (
@@ -85,13 +89,13 @@ const BottomBar = ({ items, totals }) => {
                 <Typography variant="h6">Total: ${totals.total.toFixed(2)}</Typography>
             </Box>
 
-            <Dialog open={success} onClose={() => setSuccess(false)}>
+            <Dialog open={success} onClose={handleCloseDialog}>
                 <DialogTitle>Transaction Complete</DialogTitle>
                 <DialogContent>
                     Transaction has been processed successfully.
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setSuccess(false)}>Close</Button>
+                    <Button onClick={handleCloseDialog}>Close</Button>
                 </DialogActions>
             </Dialog>
         </Box>

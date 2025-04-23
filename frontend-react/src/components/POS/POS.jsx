@@ -32,6 +32,15 @@ const POS = () => {
         });
     };
 
+    const clearCart = () => {
+        setItems([]);
+        setTotals({
+            subtotal: 0,
+            tax: 0,
+            total: 0
+        });
+    };
+
     return (
         <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
             <TopBar />
@@ -39,7 +48,7 @@ const POS = () => {
                 <ProductTable items={items} setItems={setItems} updateTotals={updateTotals} />
                 <Sidebar onProductsFound={handleProductsFound} />
             </Box>
-            <BottomBar items={items} totals={totals} />
+            <BottomBar items={items} totals={totals} onTransactionComplete={clearCart} />
         </Box>
     );
 };
