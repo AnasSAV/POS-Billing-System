@@ -10,6 +10,8 @@ import {
     DialogActions,
     Alert 
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { createTransaction } from '../../services/api';
 import styles from '../styles/BottomBar.module.css';
@@ -18,6 +20,11 @@ const BottomBar = ({ items, totals, onTransactionComplete }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
+    const navigate = useNavigate();
+
+    // Get user data from localStorage
+    const user = JSON.parse(localStorage.getItem('user'));
+    const isAdmin = user?.role === 'admin';
 
     const handleCheckout = async () => {
         try {
@@ -64,6 +71,10 @@ const BottomBar = ({ items, totals, onTransactionComplete }) => {
         setSuccess(false);
     };
 
+    const handleDashboardClick = () => {
+        navigate('/dashboard');
+    };
+
     return (
         <Box className={styles.bottomBar}>
             <Box>
@@ -87,6 +98,16 @@ const BottomBar = ({ items, totals, onTransactionComplete }) => {
                 <Button variant="contained" className={styles.actionButton}>F2 - Discount</Button>
                 <Button variant="contained" className={styles.actionButton}>Comment</Button>
                 <Button variant="contained" className={styles.actionButton}>Cash Drawer</Button>
+                {isAdmin && (
+                    <Button 
+                        variant="contained" 
+                        className={styles.dashboardButton}
+                        onClick={handleDashboardClick}
+                        startIcon={<DashboardIcon />}
+                    >
+                        Dashboard
+                    </Button>
+                )}
             </Box>
             <Box className={styles.totalsSection}>
                 {error && (

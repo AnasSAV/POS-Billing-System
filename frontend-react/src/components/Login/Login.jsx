@@ -14,6 +14,8 @@ const Login = () => {
             const data = await loginUser(credentials);
             if (data.token) {
                 localStorage.setItem('token', data.token);
+                // Store user data including role
+                localStorage.setItem('user', JSON.stringify(data.user));
                 navigate('/pos');
             } else {
                 setError(data.error || 'Login failed');

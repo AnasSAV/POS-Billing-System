@@ -42,6 +42,17 @@
     color: #fff !important;
 }
 
+.dashboardButton {
+    background-color: #1976d2 !important;
+    color: white !important;
+    margin-right: 8px !important;
+    font-weight: bold !important;
+}
+
+.dashboardButton:hover {
+    background-color: #1565c0 !important;
+}
+
 .totalsSection {
     text-align: right;
 }

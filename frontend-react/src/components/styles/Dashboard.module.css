@@ -1,0 +1,19 @@
+.paper {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.fixedHeight {
+    height: 240px;
+}
+
+.title {
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.chart {
+    height: 200px;
+}

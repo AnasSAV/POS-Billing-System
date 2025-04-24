@@ -6,6 +6,9 @@ import Sidebar from './Sidebar';
 import BottomBar from './BottomBar';
 
 const POS = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const isAdmin = user?.role === 'admin';
+
     const [items, setItems] = useState([]);
     const [totals, setTotals] = useState({
         subtotal: 0,
@@ -48,7 +51,12 @@ const POS = () => {
                 <ProductTable items={items} setItems={setItems} updateTotals={updateTotals} />
                 <Sidebar onProductsFound={handleProductsFound} />
             </Box>
-            <BottomBar items={items} totals={totals} onTransactionComplete={clearCart} />
+            <BottomBar 
+                items={items} 
+                totals={totals} 
+                onTransactionComplete={clearCart}
+                isAdmin={isAdmin}
+            />
         </Box>
     );
 };
