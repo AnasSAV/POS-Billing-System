@@ -11,6 +11,7 @@ import {
     Alert 
 } from '@mui/material';
 import { createTransaction } from '../../services/api';
+import styles from '../styles/BottomBar.module.css';
 
 const BottomBar = ({ items, totals, onTransactionComplete }) => {
     const [loading, setLoading] = useState(false);
@@ -54,45 +55,36 @@ const BottomBar = ({ items, totals, onTransactionComplete }) => {
     };
 
     return (
-        <Box sx={{ 
-            borderTop: '1px solid #ddd', 
-            p: 2, 
-            display: 'flex', 
-            justifyContent: 'space-between' 
-        }}>
+        <Box className={styles.bottomBar}>
             <Box>
                 <Button 
                     variant="contained" 
-                    sx={{ 
-                        mr: 1,
-                        backgroundColor: 'success.main', // Green color
-                        '&:hover': {
-                            backgroundColor: 'success.dark'
-                        }
-                    }}
+                    className={styles.checkoutButton}
                     onClick={handleCheckout}
                     disabled={loading || items.length === 0}
                 >
                     {loading ? <CircularProgress size={24} /> : 'Checkout'}
                 </Button>
-                <Button variant="contained" sx={{ mr: 1 }}>F2 - Discount</Button>
-                <Button variant="contained" sx={{ mr: 1 }}>Comment</Button>
-                <Button variant="contained">Cash Drawer</Button>
+                <Button variant="contained" className={styles.actionButton}>F2 - Discount</Button>
+                <Button variant="contained" className={styles.actionButton}>Comment</Button>
+                <Button variant="contained" className={styles.actionButton}>Cash Drawer</Button>
             </Box>
-            <Box sx={{ textAlign: 'right' }}>
+            <Box className={styles.totalsSection}>
                 {error && (
-                    <Alert severity="error" sx={{ mb: 2 }}>
+                    <Alert severity="error" className={styles.alert}>
                         {error}
                     </Alert>
                 )}
                 {success && (
-                    <Alert severity="success" sx={{ mb: 2 }}>
+                    <Alert severity="success" className={styles.alert}>
                         Transaction completed successfully!
                     </Alert>
                 )}
                 <Typography>Subtotal: ${totals.subtotal.toFixed(2)}</Typography>
                 <Typography>Tax: ${totals.tax.toFixed(2)}</Typography>
-                <Typography variant="h6">Total: ${totals.total.toFixed(2)}</Typography>
+                <Typography className={styles.totalAmount}>
+                    Total: ${totals.total.toFixed(2)}
+                </Typography>
             </Box>
 
             <Dialog open={success} onClose={handleCloseDialog}>

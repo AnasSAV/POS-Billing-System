@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import styles from '../styles/TopBar.module.css';
 
 const TopBar = () => {
     const navigate = useNavigate();
@@ -13,19 +14,12 @@ const TopBar = () => {
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                <Typography className={styles.title} variant="h6" component="div">
                     POS System
                 </Typography>
                 <IconButton 
-                    color="error"  // Red color
                     onClick={handleLogout}
-                    sx={{ 
-                        backgroundColor: 'error.main',
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: 'error.dark'
-                        }
-                    }}
+                    className={styles.logoutButton}
                 >
                     Logout
                 </IconButton>

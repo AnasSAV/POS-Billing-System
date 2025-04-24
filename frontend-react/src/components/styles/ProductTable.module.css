@@ -1,11 +1,15 @@
 .tableContainer {
     flex: 1;
-    margin: 16px;
+    margin: 16px !important;
 }
 
 .quantityField {
-    width: 60px;
-    margin: 0 8px;
+    width: 60px !important;
+    margin: 0 8px !important;
+}
+
+.quantityField input {
+    text-align: center;
 }
 
 .quantityInput {
@@ -13,9 +17,9 @@
 }
 
 .rightAlign {
-    text-align: right;
+    text-align: right !important;
 }
 
 .centerAlign {
-    text-align: center;
+    text-align: center !important;
 }

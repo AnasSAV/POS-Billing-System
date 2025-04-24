@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import styles from '../styles/ProductTable.module.css';
 
 const ProductTable = ({ items, setItems, updateTotals }) => {
     const handleQuantityChange = (index, newQuantity) => {
@@ -31,21 +32,21 @@ const ProductTable = ({ items, setItems, updateTotals }) => {
     };
 
     return (
-        <TableContainer component={Paper} sx={{ flex: 1, margin: 2 }}>
+        <TableContainer component={Paper} className={styles.tableContainer}>
             <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell>Product</TableCell>
-                        <TableCell align="center">Quantity</TableCell>
-                        <TableCell align="right">Price</TableCell>
-                        <TableCell align="right">Total</TableCell>
+                        <TableCell className={styles.centerAlign}>Quantity</TableCell>
+                        <TableCell className={styles.rightAlign}>Price</TableCell>
+                        <TableCell className={styles.rightAlign}>Total</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {items.map((item, index) => (
                         <TableRow key={index}>
                             <TableCell>{item.name}</TableCell>
-                            <TableCell align="center">
+                            <TableCell className={styles.centerAlign}>
                                 <IconButton 
                                     size="small"
                                     onClick={() => handleQuantityChange(index, item.quantity - 1)}
@@ -57,11 +58,7 @@ const ProductTable = ({ items, setItems, updateTotals }) => {
                                     type="number"
                                     value={item.quantity}
                                     onChange={(e) => handleManualQuantity(index, e)}
-                                    sx={{ 
-                                        width: '60px',
-                                        mx: 1,
-                                        '& input': { textAlign: 'center' }
-                                    }}
+                                    className={styles.quantityField}
                                 />
                                 <IconButton 
                                     size="small"
@@ -70,10 +67,10 @@ const ProductTable = ({ items, setItems, updateTotals }) => {
                                     <AddIcon />
                                 </IconButton>
                             </TableCell>
-                            <TableCell align="right">
+                            <TableCell className={styles.rightAlign}>
                                 ${item.price.toFixed(2)}
                             </TableCell>
-                            <TableCell align="right">
+                            <TableCell className={styles.rightAlign}>
                                 ${(item.price * item.quantity).toFixed(2)}
                             </TableCell>
                         </TableRow>

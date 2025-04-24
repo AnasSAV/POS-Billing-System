@@ -6,12 +6,17 @@
 }
 
 .checkoutButton {
-    background-color: #4caf50;
-    margin-right: 8px;
+    background-color: #4caf50 !important;
+    margin-right: 8px !important;
+    color: white !important;
 }
 
 .checkoutButton:hover {
-    background-color: #388e3c;
+    background-color: #388e3c !important;
+}
+
+.actionButton {
+    margin-right: 8px !important;
 }
 
 .totalsSection {
@@ -19,6 +24,10 @@
 }
 
 .totalAmount {
-    font-size: 1.25rem;
-    font-weight: bold;
+    font-size: 1.25rem !important;
+    font-weight: bold !important;
+}
+
+.alert {
+    margin-bottom: 16px;
 }
