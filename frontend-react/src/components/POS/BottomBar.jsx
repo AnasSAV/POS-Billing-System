@@ -63,7 +63,13 @@ const BottomBar = ({ items, totals, onTransactionComplete }) => {
             <Box>
                 <Button 
                     variant="contained" 
-                    sx={{ mr: 1 }}
+                    sx={{ 
+                        mr: 1,
+                        backgroundColor: 'success.main', // Green color
+                        '&:hover': {
+                            backgroundColor: 'success.dark'
+                        }
+                    }}
                     onClick={handleCheckout}
                     disabled={loading || items.length === 0}
                 >

@@ -16,7 +16,17 @@ const TopBar = () => {
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     POS System
                 </Typography>
-                <IconButton color="inherit" onClick={handleLogout}>
+                <IconButton 
+                    color="error"  // Red color
+                    onClick={handleLogout}
+                    sx={{ 
+                        backgroundColor: 'error.main',
+                        color: 'white',
+                        '&:hover': {
+                            backgroundColor: 'error.dark'
+                        }
+                    }}
+                >
                     Logout
                 </IconButton>
             </Toolbar>
