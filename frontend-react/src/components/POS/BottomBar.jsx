@@ -44,8 +44,13 @@ const BottomBar = ({ items, totals, onTransactionComplete }) => {
             setSuccess(true);
             onTransactionComplete(); // Clear the cart after successful transaction
         } catch (error) {
-            setError(error.message);
             console.error('Checkout error:', error);
+            // Handle specific out-of-stock error
+            if (error.message.includes('check_positive_stock')) {
+                setError('Transaction failed: One or more products are out of stock');
+            } else {
+                setError(error.message || 'Transaction failed');
+            }
         } finally {
             setLoading(false);
         }
@@ -85,7 +90,14 @@ const BottomBar = ({ items, totals, onTransactionComplete }) => {
             </Box>
             <Box className={styles.totalsSection}>
                 {error && (
-                    <Alert severity="error" className={styles.alert}>
+                    <Alert 
+                        severity="error" 
+                        className={styles.alert}
+                        sx={{ 
+                            marginBottom: 2,
+                            fontWeight: 'bold'
+                        }}
+                    >
                         {error}
                     </Alert>
                 )}

@@ -53,12 +53,13 @@ export const createTransaction = async (transactionData, token) => {
             throw new Error('Invalid token');
         }
 
+        const data = await response.json();
+        
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error || 'Failed to create transaction');
+            throw new Error(data.error || 'Failed to create transaction');
         }
 
-        return response.json();
+        return data;
     } catch (error) {
         console.error('Transaction API Error:', error);
         throw error;
