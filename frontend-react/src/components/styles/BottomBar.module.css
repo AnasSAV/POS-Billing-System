@@ -22,6 +22,11 @@
     margin-right: 8px !important;
 }
 
+.actionButton, .checkoutButton, .clearButton {
+    font-weight: bold !important;
+    margin-right: 8px !important;
+}
+
 .clearButton {
     background-color: #f44336 !important;
     margin-right: 8px !important;
