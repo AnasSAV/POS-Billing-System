@@ -33,7 +33,7 @@ const Login = () => {
                 alignItems: 'center',
             }}>
                 <Typography component="h1" variant="h5">
-                    Login to POS System
+                    Login to POS Billing System
                 </Typography>
                 <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
                     <TextField
