@@ -1,0 +1,17 @@
+.sidebar {
+    width: 300px;
+    padding: 16px;
+    border-left: 1px solid #ddd;
+}
+
+.searchField {
+    margin-bottom: 16px;
+}
+
+.addButton {
+    margin-top: 16px;
+}
+
+.errorAlert {
+    margin-bottom: 16px;
+}

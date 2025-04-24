@@ -9,6 +9,7 @@ import {
     Stack 
 } from '@mui/material';
 import { getProducts } from '../../services/api';
+import styles from '../styles/Sidebar.module.css';
 
 const Sidebar = ({ onProductsFound }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -62,9 +63,9 @@ const Sidebar = ({ onProductsFound }) => {
     }, [searchQuery]);
 
     return (
-        <Box sx={{ width: 300, p: 2, borderLeft: '1px solid #ddd' }}>
+        <Box className={styles.sidebar}>
             {error && (
-                <Alert severity="error" sx={{ mb: 2 }}>
+                <Alert severity="error" className={styles.errorAlert}>
                     {error}
                 </Alert>
             )}
@@ -81,6 +82,7 @@ const Sidebar = ({ onProductsFound }) => {
                     renderInput={(params) => (
                         <TextField
                             {...params}
+                            className={styles.searchField}
                             label="Search Products"
                             variant="outlined"
                             margin="normal"
@@ -101,6 +103,7 @@ const Sidebar = ({ onProductsFound }) => {
                 <Button 
                     fullWidth 
                     variant="contained"
+                    className={styles.addButton}
                     onClick={handleAddProducts}
                     disabled={loading || selectedProducts.length === 0}
                 >

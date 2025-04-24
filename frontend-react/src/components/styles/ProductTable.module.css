@@ -1,0 +1,21 @@
+.tableContainer {
+    flex: 1;
+    margin: 16px;
+}
+
+.quantityField {
+    width: 60px;
+    margin: 0 8px;
+}
+
+.quantityInput {
+    text-align: center;
+}
+
+.rightAlign {
+    text-align: right;
+}
+
+.centerAlign {
+    text-align: center;
+}

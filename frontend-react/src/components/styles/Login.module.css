@@ -1,0 +1,21 @@
+.loginContainer {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form {
+    margin-top: 1px;
+    width: 100%;
+}
+
+.submitButton {
+    margin-top: 3px;
+    margin-bottom: 2px;
+}
+
+.errorText {
+    color: #f44336;
+    text-align: center;
+}

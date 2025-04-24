@@ -1,0 +1,24 @@
+.bottomBar {
+    border-top: 1px solid #ddd;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkoutButton {
+    background-color: #4caf50;
+    margin-right: 8px;
+}
+
+.checkoutButton:hover {
+    background-color: #388e3c;
+}
+
+.totalsSection {
+    text-align: right;
+}
+
+.totalAmount {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
