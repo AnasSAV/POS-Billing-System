@@ -1,7 +1,25 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Box, styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import styles from '../styles/TopBar.module.css';
+
+// Add styled component for logout button
+const LogoutButton = styled(IconButton)(({ theme }) => ({
+    backgroundColor: '#d32f2f',
+    display: 'inline-block',
+    color: 'white',
+    fontSize: 'large',
+    padding: '8px 16px',
+    borderRadius: '8px',
+    fontWeight: 'bold',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+    transition: 'all 0.3s ease',
+    '&:hover': {
+        backgroundColor: '#b71c1c',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+        transform: 'translateY(-1px)'
+    }
+}));
 
 const TopBar = () => {
     const navigate = useNavigate();
@@ -24,12 +42,9 @@ const TopBar = () => {
                         POS Billing System
                     </Typography>
                 </Box>
-                <IconButton 
-                    className={styles.logoutButton}
-                    onClick={handleLogout}
-                >
+                <LogoutButton onClick={handleLogout}>
                     Logout
-                </IconButton>
+                </LogoutButton>
             </Toolbar>
         </AppBar>
     );
