@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import styles from '../styles/TopBar.module.css';
+import styles from '../styles/TopBar.module.css';  // Fix the import path
 
 const TopBar = () => {
     const navigate = useNavigate();
@@ -15,11 +15,11 @@ const TopBar = () => {
         <AppBar position="static">
             <Toolbar>
                 <Typography className={styles.title} variant="h6" component="div">
-                    POS System
+                    POS Billing System
                 </Typography>
                 <IconButton 
-                    onClick={handleLogout}
                     className={styles.logoutButton}
+                    onClick={handleLogout}
                 >
                     Logout
                 </IconButton>
