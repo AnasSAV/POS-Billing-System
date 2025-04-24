@@ -10,6 +10,7 @@ import {
     DialogActions,
     Alert 
 } from '@mui/material';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { createTransaction } from '../../services/api';
 import styles from '../styles/BottomBar.module.css';
 
@@ -50,6 +51,10 @@ const BottomBar = ({ items, totals, onTransactionComplete }) => {
         }
     };
 
+    const handleClearAll = () => {
+        onTransactionComplete(); // Reuse the same function to clear everything
+    };
+
     const handleCloseDialog = () => {
         setSuccess(false);
     };
@@ -64,6 +69,15 @@ const BottomBar = ({ items, totals, onTransactionComplete }) => {
                     disabled={loading || items.length === 0}
                 >
                     {loading ? <CircularProgress size={24} /> : 'Checkout'}
+                </Button>
+                <Button 
+                    variant="contained" 
+                    className={styles.clearButton}
+                    onClick={handleClearAll}
+                    startIcon={<DeleteSweepIcon />}
+                    disabled={items.length === 0}
+                >
+                    Clear All
                 </Button>
                 <Button variant="contained" className={styles.actionButton}>F2 - Discount</Button>
                 <Button variant="contained" className={styles.actionButton}>Comment</Button>

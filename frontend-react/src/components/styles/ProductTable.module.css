@@ -23,3 +23,11 @@
 .centerAlign {
     text-align: center !important;
 }
+
+.deleteButton {
+    color: #f44336 !important;
+}
+
+.deleteButton:hover {
+    color: #d32f2f !important;
+}

@@ -22,6 +22,21 @@
     margin-right: 8px !important;
 }
 
+.clearButton {
+    background-color: #f44336 !important;
+    margin-right: 8px !important;
+    color: white !important;
+}
+
+.clearButton:hover {
+    background-color: #d32f2f !important;
+}
+
+.clearButton:disabled {
+    background-color: #9e9e9e !important;
+    color: #fff !important;
+}
+
 .totalsSection {
     text-align: right;
 }

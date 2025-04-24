@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import DeleteIcon from '@mui/icons-material/Delete';
 import styles from '../styles/ProductTable.module.css';
 
 const ProductTable = ({ items, setItems, updateTotals }) => {
@@ -31,6 +32,12 @@ const ProductTable = ({ items, setItems, updateTotals }) => {
         handleQuantityChange(index, value);
     };
 
+    const handleDeleteItem = (index) => {
+        const updatedItems = items.filter((_, i) => i !== index);
+        setItems(updatedItems);
+        updateTotals(updatedItems);
+    };
+
     return (
         <TableContainer component={Paper} className={styles.tableContainer}>
             <Table>
@@ -40,6 +47,7 @@ const ProductTable = ({ items, setItems, updateTotals }) => {
                         <TableCell className={styles.centerAlign}>Quantity</TableCell>
                         <TableCell className={styles.rightAlign}>Price</TableCell>
                         <TableCell className={styles.rightAlign}>Total</TableCell>
+                        <TableCell className={styles.centerAlign}>Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -72,6 +80,15 @@ const ProductTable = ({ items, setItems, updateTotals }) => {
                             </TableCell>
                             <TableCell className={styles.rightAlign}>
                                 ${(item.price * item.quantity).toFixed(2)}
+                            </TableCell>
+                            <TableCell className={styles.centerAlign}>
+                                <IconButton 
+                                    color="error"
+                                    onClick={() => handleDeleteItem(index)}
+                                    size="small"
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
                             </TableCell>
                         </TableRow>
                     ))}
