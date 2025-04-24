@@ -17,3 +17,39 @@
 .chart {
     height: 200px;
 }
+
+.statsCard {
+    padding: 20px;
+    text-align: center;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.statsCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chartPaper {
+    padding: 20px;
+    height: 100%;
+}
+
+.tablePaper {
+    padding: 20px;
+    height: 400px;
+    overflow-y: auto;
+}
+
+.alertPaper {
+    padding: 20px;
+    height: 400px;
+    overflow-y: auto;
+    background-color: #fff8f8;
+}
+
+.commentsPaper {
+    padding: 20px;
+    height: 400px;
+    overflow-y: auto;
+}
