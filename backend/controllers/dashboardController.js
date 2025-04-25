@@ -167,15 +167,3 @@ export const getDashboardStats = async (req, res) => {
         res.status(401).json({ error: error.message });
     }
 };
-
-// Get dashboard summary
-export const getDashboardSummary = async (req, res) => {
-    try {
-        await verifyAdminToken(req.headers.authorization?.split(' ')[1]);
-        const result = await pool.query('SELECT * FROM get_dashboard_summary()');
-        res.json(result.rows[0]);
-    } catch (error) {
-        console.error('Dashboard summary error:', error);
-        res.status(401).json({ error: error.message });
-    }
-};

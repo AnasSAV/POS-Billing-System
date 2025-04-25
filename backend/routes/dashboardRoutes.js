@@ -1,6 +1,5 @@
 import express from 'express';
 import { 
-    getDashboardStats,
     getWeeklyCustomers,
     getDailyTraffic,
     getSalesDistribution,
@@ -10,9 +9,6 @@ import {
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
-
-// Combined stats endpoint
-router.get('/dashboard-stats', authMiddleware, getDashboardStats);
 
 // Individual endpoints
 router.get('/stats/weekly-customers', authMiddleware, getWeeklyCustomers);
