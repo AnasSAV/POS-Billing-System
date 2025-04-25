@@ -30,7 +30,12 @@ import {
 } from 'recharts';
 import TopBar from '../shared/TopBar';
 import styles from '../styles/Dashboard.module.css';
-import { getDashboardStats } from '../../services/api';
+import { 
+    getWeeklyCustomers, 
+    getDailyTraffic, 
+    getSalesDistribution, 
+    getInventoryStatus 
+} from '../../services/api';
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
@@ -38,8 +43,22 @@ const Dashboard = () => {
         dailyCustomers: [],
         productInventory: [],
         lowStockProducts: [],
-        customerComments: [],
-        salesData: []
+        salesData: [],
+        customerComments: [
+            // Hardcoded comments for now
+            {
+                id: 1,
+                content: 'Great service and fast checkout!',
+                date: '2024-04-24',
+                customer: 'John Doe'
+            },
+            {
+                id: 2,
+                content: 'The products were fresh and well-organized.',
+                date: '2024-04-24',
+                customer: 'Jane Smith'
+            }
+        ]
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -48,12 +67,33 @@ const Dashboard = () => {
         const fetchDashboardData = async () => {
             try {
                 setLoading(true);
+                setError('');
                 const token = localStorage.getItem('token');
+                
                 if (!token) {
                     throw new Error('No token found');
                 }
-                const data = await getDashboardStats(token);
-                setStats(data);
+
+                const [
+                    weeklyCustomersData,
+                    dailyTrafficData,
+                    salesDistributionData,
+                    inventoryData
+                ] = await Promise.all([
+                    getWeeklyCustomers(token),
+                    getDailyTraffic(token),
+                    getSalesDistribution(token),
+                    getInventoryStatus(token)
+                ]);
+
+                setStats(prevStats => ({
+                    ...prevStats,
+                    weeklyCustomers: weeklyCustomersData.weeklyCustomers,
+                    dailyCustomers: dailyTrafficData.dailyCustomers,
+                    salesData: salesDistributionData.salesData,
+                    productInventory: inventoryData.productInventory,
+                    lowStockProducts: inventoryData.lowStockProducts
+                }));
             } catch (error) {
                 console.error('Failed to fetch dashboard data:', error);
                 setError(error.message);

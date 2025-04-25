@@ -87,3 +87,67 @@ export const getDashboardStats = async (token) => {
         throw error;
     }
 };
+
+export const getWeeklyCustomers = async (token) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/stats/weekly-customers`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error('Failed to fetch weekly customers');
+        return response.json();
+    } catch (error) {
+        console.error('Weekly customers API Error:', error);
+        throw error;
+    }
+};
+
+export const getDailyTraffic = async (token) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/stats/daily-traffic`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error('Failed to fetch daily traffic');
+        return response.json();
+    } catch (error) {
+        console.error('Daily traffic API Error:', error);
+        throw error;
+    }
+};
+
+export const getSalesDistribution = async (token) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/stats/sales-distribution`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error('Failed to fetch sales distribution');
+        return response.json();
+    } catch (error) {
+        console.error('Sales distribution API Error:', error);
+        throw error;
+    }
+};
+
+export const getInventoryStatus = async (token) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/stats/inventory`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error('Failed to fetch inventory status');
+        return response.json();
+    } catch (error) {
+        console.error('Inventory API Error:', error);
+        throw error;
+    }
+};
