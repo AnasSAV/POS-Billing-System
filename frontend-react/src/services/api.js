@@ -65,3 +65,25 @@ export const createTransaction = async (transactionData, token) => {
         throw error;
     }
 };
+
+export const getDashboardStats = async (token) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/dashboard-stats`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to fetch dashboard stats');
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error('Dashboard API Error:', error);
+        throw error;
+    }
+};

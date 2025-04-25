@@ -33,6 +33,11 @@
 .chartPaper {
     padding: 20px;
     height: 100%;
+    transition: all 0.3s ease;
+}
+
+.chartPaper:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tablePaper {
