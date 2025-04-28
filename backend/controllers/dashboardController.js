@@ -71,18 +71,26 @@ export const getSalesDistribution = async (req, res) => {
 export const getInventoryStatus = async (req, res) => {
     try {
         await verifyAdminToken(req.headers.authorization?.split(' ')[1]);
-        const result = await pool.query('SELECT * FROM get_low_stock_products()');
+        const result = await pool.query(`
+            SELECT 
+                p.id,
+                p.name,
+                p.price,
+                p.stock_quantity as stock
+            FROM products p
+            ORDER BY p.name ASC
+        `);
         
-        const productInventory = result.rows.map(product => ({
+        const products = result.rows.map(product => ({
             id: product.id,
             name: product.name,
-            stock: parseInt(product.stock),
-            price: parseFloat(product.price || 0)
+            price: parseFloat(product.price),
+            stock: parseInt(product.stock)
         }));
 
         res.json({
-            productInventory,
-            lowStockProducts: productInventory.filter(product => product.stock < 10)
+            productInventory: products,
+            lowStockProducts: products.filter(product => product.stock < 10)
         });
     } catch (error) {
         console.error('Inventory status error:', error);

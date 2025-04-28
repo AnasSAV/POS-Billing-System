@@ -21,12 +21,9 @@ import {
     CartesianGrid, 
     Tooltip, 
     ResponsiveContainer,
-    BarChart,
-    Bar,
     PieChart,
     Pie,
-    Cell,
-    Legend
+    Cell
 } from 'recharts';
 import TopBar from '../shared/TopBar';
 import styles from '../styles/Dashboard.module.css';
@@ -132,72 +129,120 @@ const Dashboard = () => {
             <TopBar />
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4, flex: 1, overflow: 'auto' }}>
                 <Grid container spacing={3}>
-                    {/* Weekly Customer Count Card and Sales Distribution */}
-                    <Grid container item xs={12} md={4} spacing={2}>
-                        <Grid item xs={12}>
-                            <Paper className={styles.statsCard}>
-                                <Typography variant="h6" color="primary">
-                                    Weekly Customers
-                                </Typography>
-                                <Typography variant="h3" component="div">
-                                    {stats.weeklyCustomers}
-                                </Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    Past 7 days
-                                </Typography>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={styles.statsCard}>
-                                <Typography variant="h6" gutterBottom>
-                                    Sales Distribution
-                                </Typography>
-                                <ResponsiveContainer width="100%" height={200}>
-                                    <PieChart>
-                                        <Pie
-                                            data={stats.salesData}
-                                            innerRadius={60}
-                                            outerRadius={80}
-                                            paddingAngle={5}
-                                            dataKey="value"
-                                        >
-                                            {stats.salesData.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip />
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </Paper>
-                        </Grid>
+                    {/* First Row: Stats and Inventory */}
+                    <Grid item xs={12} md={4}>
+                        <Paper className={styles.statsCard}>
+                            <Typography variant="h6" color="primary">
+                                Weekly Customers
+                            </Typography>
+                            <Typography variant="h3" component="div">
+                                {stats.weeklyCustomers}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                                Past 7 days
+                            </Typography>
+                        </Paper>
                     </Grid>
 
-                    {/* Sales Analysis Bar Chart */}
-                    <Grid item xs={12} md={8}>
+                    {/* Product Inventory Section */}
+                    <Grid item xs={12} md={4}>
+                        <Paper className={styles.tablePaper}>
+                            <Typography variant="h6" gutterBottom>
+                                Product Inventory
+                            </Typography>
+                            {stats.productInventory.length === 0 ? (
+                                <Typography color="textSecondary" sx={{ p: 2 }}>
+                                    No products available
+                                </Typography>
+                            ) : (
+                                <List sx={{ width: '100%' }}>
+                                    {stats.productInventory.map((product) => (
+                                        <ListItem 
+                                            key={product.id} 
+                                            divider 
+                                            sx={{ 
+                                                display: 'flex', 
+                                                justifyContent: 'space-between',
+                                                flexWrap: 'wrap'
+                                            }}
+                                        >
+                                            <Box sx={{ flex: 1, minWidth: '150px' }}>
+                                                <Typography variant="body1">
+                                                    {product.name}
+                                                </Typography>
+                                                <Typography variant="body2" color="textSecondary">
+                                                    ${product.price.toFixed(2)}
+                                                </Typography>
+                                            </Box>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                <Typography>
+                                                    Stock: {product.stock}
+                                                </Typography>
+                                                {product.stock < 10 && (
+                                                    <Alert 
+                                                        severity="warning" 
+                                                        sx={{ 
+                                                            py: 0, 
+                                                            px: 1, 
+                                                            '& .MuiAlert-message': { 
+                                                                p: 0 
+                                                            } 
+                                                        }}
+                                                    >
+                                                        Low
+                                                    </Alert>
+                                                )}
+                                            </Box>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            )}
+                        </Paper>
+                    </Grid>
+
+                    <Grid item xs={12} md={4}>
+                        <Paper className={styles.alertPaper}>
+                            <Typography variant="h6" gutterBottom color="error">
+                                Low Stock Products
+                            </Typography>
+                            <List>
+                                {stats.lowStockProducts.map((product) => (
+                                    <ListItem key={product.id}>
+                                        <Alert severity="error" sx={{ width: '100%' }}>
+                                            {product.name} - Only {product.stock} left
+                                        </Alert>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Paper>
+                    </Grid>
+
+                    {/* Second Row: Charts */}
+                    <Grid item xs={12} md={4}>
                         <Paper className={styles.chartPaper}>
                             <Typography variant="h6" gutterBottom>
-                                Sales Analysis
+                                Sales Distribution
                             </Typography>
                             <ResponsiveContainer width="100%" height={300}>
-                                <BarChart data={stats.salesData}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
+                                <PieChart>
+                                    <Pie
+                                        data={stats.salesData}
+                                        innerRadius={60}
+                                        outerRadius={80}
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                    >
+                                        {stats.salesData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        ))}
+                                    </Pie>
                                     <Tooltip />
-                                    <Legend />
-                                    <Bar 
-                                        dataKey="value" 
-                                        fill="#8884d8" 
-                                        name="Sales Amount"
-                                        radius={[4, 4, 0, 0]}
-                                    />
-                                </BarChart>
+                                </PieChart>
                             </ResponsiveContainer>
                         </Paper>
                     </Grid>
 
-                    {/* Daily Customer Traffic */}
-                    <Grid item xs={12}>
+                    <Grid item xs={12} md={8}>
                         <Paper className={styles.chartPaper}>
                             <Typography variant="h6" gutterBottom>
                                 Daily Customer Traffic
@@ -220,54 +265,7 @@ const Dashboard = () => {
                         </Paper>
                     </Grid>
 
-                    {/* Product Inventory */}
-                    <Grid item xs={12} md={6}>
-                        <Paper className={styles.tablePaper}>
-                            <Typography variant="h6" gutterBottom>
-                                Product Inventory
-                            </Typography>
-                            <List>
-                                {stats.productInventory.map((product) => (
-                                    <ListItem key={product.id} divider>
-                                        <ListItemText 
-                                            primary={product.name}
-                                            secondary={`Price: $${product.price.toFixed(2)}`}
-                                        />
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                            <Typography>
-                                                Stock: {product.stock}
-                                            </Typography>
-                                            {product.stock < 10 && (
-                                                <Alert severity="warning" sx={{ ml: 2 }}>
-                                                    Low Stock
-                                                </Alert>
-                                            )}
-                                        </Box>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </Paper>
-                    </Grid>
-
-                    {/* Low Stock Alert */}
-                    <Grid item xs={12} md={6}>
-                        <Paper className={styles.alertPaper}>
-                            <Typography variant="h6" gutterBottom color="error">
-                                Low Stock Products
-                            </Typography>
-                            <List>
-                                {stats.lowStockProducts.map((product) => (
-                                    <ListItem key={product.id}>
-                                        <Alert severity="error" sx={{ width: '100%' }}>
-                                            {product.name} - Only {product.stock} left
-                                        </Alert>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </Paper>
-                    </Grid>
-
-                    {/* Customer Comments */}
+                    {/* Third Row: Comments */}
                     <Grid item xs={12}>
                         <Paper className={styles.commentsPaper}>
                             <Typography variant="h6" gutterBottom>
