@@ -21,7 +21,7 @@
 .statsCard {
     padding: 20px;
     text-align: center;
-    height: 300px;
+    height: 200px;
     transition: all 0.3s ease;
 }
 
@@ -53,8 +53,9 @@
 
 .alertPaper {
     padding: 20px;
-    height: 300px;
+    height: 200px;
     overflow-y: auto;
+    background-color: #fff8f8;
 }
 
 .commentsPaper {

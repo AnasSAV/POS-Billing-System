@@ -129,8 +129,8 @@ const Dashboard = () => {
             <TopBar />
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4, flex: 1, overflow: 'auto' }}>
                 <Grid container spacing={3}>
-                    {/* First Row: Stats and Inventory */}
-                    <Grid item xs={12} md={4}>
+                    {/* First Row: Weekly Customers and Low Stock */}
+                    <Grid item xs={12} md={6}>
                         <Paper className={styles.statsCard}>
                             <Typography variant="h6" color="primary">
                                 Weekly Customers
@@ -144,63 +144,7 @@ const Dashboard = () => {
                         </Paper>
                     </Grid>
 
-                    {/* Product Inventory Section */}
-                    <Grid item xs={12} md={4}>
-                        <Paper className={styles.tablePaper}>
-                            <Typography variant="h6" gutterBottom>
-                                Product Inventory
-                            </Typography>
-                            {stats.productInventory.length === 0 ? (
-                                <Typography color="textSecondary" sx={{ p: 2 }}>
-                                    No products available
-                                </Typography>
-                            ) : (
-                                <List sx={{ width: '100%' }}>
-                                    {stats.productInventory.map((product) => (
-                                        <ListItem 
-                                            key={product.id} 
-                                            divider 
-                                            sx={{ 
-                                                display: 'flex', 
-                                                justifyContent: 'space-between',
-                                                flexWrap: 'wrap'
-                                            }}
-                                        >
-                                            <Box sx={{ flex: 1, minWidth: '150px' }}>
-                                                <Typography variant="body1">
-                                                    {product.name}
-                                                </Typography>
-                                                <Typography variant="body2" color="textSecondary">
-                                                    ${product.price.toFixed(2)}
-                                                </Typography>
-                                            </Box>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                <Typography>
-                                                    Stock: {product.stock}
-                                                </Typography>
-                                                {product.stock < 10 && (
-                                                    <Alert 
-                                                        severity="warning" 
-                                                        sx={{ 
-                                                            py: 0, 
-                                                            px: 1, 
-                                                            '& .MuiAlert-message': { 
-                                                                p: 0 
-                                                            } 
-                                                        }}
-                                                    >
-                                                        Low
-                                                    </Alert>
-                                                )}
-                                            </Box>
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            )}
-                        </Paper>
-                    </Grid>
-
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6}>
                         <Paper className={styles.alertPaper}>
                             <Typography variant="h6" gutterBottom color="error">
                                 Low Stock Products
@@ -217,7 +161,7 @@ const Dashboard = () => {
                         </Paper>
                     </Grid>
 
-                    {/* Second Row: Charts */}
+                    {/* Second Row: Charts and Inventory */}
                     <Grid item xs={12} md={4}>
                         <Paper className={styles.chartPaper}>
                             <Typography variant="h6" gutterBottom>
