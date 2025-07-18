@@ -9,7 +9,6 @@ import {
     CardContent,
     List,
     ListItem,
-    ListItemText,
     Alert,
     CircularProgress
 } from '@mui/material';
