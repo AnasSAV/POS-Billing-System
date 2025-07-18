@@ -15,7 +15,9 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow,
+    Tabs,
+    Tab
 } from '@mui/material';
 import { 
     LineChart, 
@@ -31,7 +33,8 @@ import {
     Pie,
     Cell,
     AreaChart,
-    Area
+    Area,
+    ComposedChart
 } from 'recharts';
 import {
     TrendingUp,
@@ -43,6 +46,90 @@ import {
 } from '@mui/icons-material';
 import TopBar from '../shared/TopBar';
 import styles from '../styles/Dashboard.module.css';
+
+// Combined Chart Component - Defined outside the main component to avoid hook issues
+const CombinedChartView = ({ selectedChart, handleChartChange, analytics }) => {
+    // Chart titles
+    const chartTitles = ['Daily Revenue Trend (7 Days)', 'Hourly Transactions', 'Weekly Performance'];
+    
+    return (
+        <Paper sx={{ p: 2, height: 380, borderRadius: 2, boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs 
+                    value={selectedChart} 
+                    onChange={handleChartChange} 
+                    indicatorColor="primary"
+                    textColor="primary"
+                    variant="fullWidth"
+                    aria-label="chart selector tabs"
+                >
+                    <Tab label="Daily Revenue" />
+                    <Tab label="Hourly Transactions" />
+                    <Tab label="Weekly Performance" />
+                </Tabs>
+            </Box>
+            
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', fontSize: '0.95rem', mt: 2 }}>
+                {chartTitles[selectedChart]}
+            </Typography>
+            
+            <Box sx={{ height: 280 }}>
+                {/* Daily Revenue Chart */}
+                {selectedChart === 0 && (
+                    <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={analytics.dailyRevenue}>
+                            <defs>
+                                <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                                </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="date" tick={{fontSize: 10}} />
+                            <YAxis tick={{fontSize: 10}} />
+                            <Tooltip formatter={(value) => [`$${value}`, 'Revenue']} />
+                            <Area 
+                                type="monotone" 
+                                dataKey="revenue" 
+                                stroke="#8884d8" 
+                                fillOpacity={1} 
+                                fill="url(#colorRevenue)" 
+                            />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                )}
+                
+                {/* Hourly Transactions Chart */}
+                {selectedChart === 1 && (
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={analytics.transactionTrends}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="time" tick={{fontSize: 10}} />
+                            <YAxis tick={{fontSize: 10}} />
+                            <Tooltip />
+                            <Bar dataKey="count" name="Transactions" fill="#00C49F" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                    </ResponsiveContainer>
+                )}
+                
+                {/* Weekly Performance Chart */}
+                {selectedChart === 2 && (
+                    <ResponsiveContainer width="100%" height="100%">
+                        <ComposedChart data={analytics.weeklyPerformance}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="day" tick={{fontSize: 10}} />
+                            <YAxis yAxisId="left" tick={{fontSize: 10}} />
+                            <YAxis yAxisId="right" orientation="right" tick={{fontSize: 10}} />
+                            <Tooltip />
+                            <Bar yAxisId="left" dataKey="transactions" name="Transactions" fill="#8884d8" />
+                            <Line yAxisId="right" type="monotone" dataKey="revenue" name="Revenue" stroke="#ff7300" strokeWidth={2} />
+                        </ComposedChart>
+                    </ResponsiveContainer>
+                )}
+            </Box>
+        </Paper>
+    );
+};
 
 const Dashboard = () => {
     const [analytics, setAnalytics] = useState({
@@ -75,6 +162,8 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [timeRange, setTimeRange] = useState('7d'); // 1d, 7d, 30d
+    // Move this hook up here:
+    const [selectedChart, setSelectedChart] = useState(0);
 
     useEffect(() => {
         const fetchAnalyticsData = async () => {
@@ -194,22 +283,33 @@ const Dashboard = () => {
     // Colors for charts
     const CHART_COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
+    // Handle chart type change
+    const handleChartChange = (event, newValue) => {
+        setSelectedChart(newValue);
+    };
+
     // Metric Card Component
     const MetricCard = ({ title, value, icon, trend, trendValue, color = 'primary' }) => (
-        <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
+        <Card sx={{ 
+            height: '100%', 
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+            color: 'white',
+            borderRadius: 2,
+            boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+        }}>
             <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box>
-                        <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                        <Typography variant="body2" sx={{ opacity: 0.8, fontSize: '0.875rem' }}>
                             {title}
                         </Typography>
-                        <Typography variant="h4" sx={{ fontWeight: 'bold', mt: 1 }}>
+                        <Typography variant="h4" sx={{ fontWeight: 'bold', mt: 1, mb: 1 }}>
                             {value}
                         </Typography>
                         {trend && (
-                            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <TrendingUp sx={{ fontSize: 16, mr: 0.5 }} />
-                                <Typography variant="body2">
+                                <Typography variant="body2" sx={{ fontSize: '0.75rem' }}>
                                     {trendValue}% vs last period
                                 </Typography>
                             </Box>
@@ -224,159 +324,128 @@ const Dashboard = () => {
     );
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#f5f5f5' }}>
             <TopBar />
-            <Container maxWidth="xl" sx={{ mt: 2, mb: 4, flex: 1, overflow: 'auto' }}>
-                <Typography variant="h4" sx={{ mb: 3, fontWeight: 'bold' }}>
+            <Container maxWidth="xl" sx={{ mt: 3, mb: 4, flex: 1 }}>
+                <Typography variant="h4" sx={{ mb: 4, fontWeight: 'bold', color: '#1976d2' }}>
                     POS Billing Analytics
                 </Typography>
                 
                 <Grid container spacing={3}>
                     {/* Key Metrics Row */}
-                    <Grid item xs={12} sm={6} md={3}>
-                        <MetricCard
-                            title="Total Revenue"
-                            value={`$${analytics.totalRevenue.toLocaleString()}`}
-                            icon={<AttachMoney sx={{ fontSize: 40 }} />}
-                            trend={true}
-                            trendValue={analytics.revenueGrowth}
-                        />
-                    </Grid>
-                    
-                    <Grid item xs={12} sm={6} md={3}>
-                        <MetricCard
-                            title="Total Transactions"
-                            value={analytics.totalTransactions.toLocaleString()}
-                            icon={<Receipt sx={{ fontSize: 40 }} />}
-                            trend={true}
-                            trendValue={8.2}
-                        />
-                    </Grid>
-                    
-                    <Grid item xs={12} sm={6} md={3}>
-                        <MetricCard
-                            title="Avg Transaction Value"
-                            value={`$${analytics.averageTransactionValue.toFixed(2)}`}
-                            icon={<ShoppingCart sx={{ fontSize: 40 }} />}
-                            trend={true}
-                            trendValue={5.7}
-                        />
-                    </Grid>
-                    
-                    <Grid item xs={12} sm={6} md={3}>
-                        <MetricCard
-                            title="Monthly Revenue"
-                            value={`$${analytics.monthlyRevenue.toLocaleString()}`}
-                            icon={<LocalAtm sx={{ fontSize: 40 }} />}
-                            trend={true}
-                            trendValue={15.3}
-                        />
-                    </Grid>
-
-                    {/* Revenue Trend Chart */}
-                    <Grid item xs={12} md={8}>
-                        <Paper sx={{ p: 3, height: 400 }}>
-                            <Typography variant="h6" gutterBottom>
-                                Daily Revenue Trend (Last 7 Days)
-                            </Typography>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={analytics.dailyRevenue}>
-                                    <defs>
-                                        <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                                            <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-                                        </linearGradient>
-                                    </defs>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="date" />
-                                    <YAxis />
-                                    <Tooltip formatter={(value) => [`$${value}`, 'Revenue']} />
-                                    <Area 
-                                        type="monotone" 
-                                        dataKey="revenue" 
-                                        stroke="#8884d8" 
-                                        fillOpacity={1} 
-                                        fill="url(#colorRevenue)" 
-                                    />
-                                </AreaChart>
-                            </ResponsiveContainer>
-                        </Paper>
+                    <Grid item xs={12}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={6} md={3}>
+                                <MetricCard
+                                    title="Total Revenue"
+                                    value={`$${analytics.totalRevenue.toLocaleString()}`}
+                                    icon={<AttachMoney sx={{ fontSize: 40 }} />}
+                                    trend={true}
+                                    trendValue={analytics.revenueGrowth}
+                                />
+                            </Grid>
+                            
+                            <Grid item xs={12} sm={6} md={3}>
+                                <MetricCard
+                                    title="Total Transactions"
+                                    value={analytics.totalTransactions.toLocaleString()}
+                                    icon={<Receipt sx={{ fontSize: 40 }} />}
+                                    trend={true}
+                                    trendValue={8.2}
+                                />
+                            </Grid>
+                            
+                            <Grid item xs={12} sm={6} md={3}>
+                                <MetricCard
+                                    title="Avg Transaction Value"
+                                    value={`$${analytics.averageTransactionValue.toFixed(2)}`}
+                                    icon={<ShoppingCart sx={{ fontSize: 40 }} />}
+                                    trend={true}
+                                    trendValue={5.7}
+                                />
+                            </Grid>
+                            
+                            <Grid item xs={12} sm={6} md={3}>
+                                <MetricCard
+                                    title="Monthly Revenue"
+                                    value={`$${analytics.monthlyRevenue.toLocaleString()}`}
+                                    icon={<LocalAtm sx={{ fontSize: 40 }} />}
+                                    trend={true}
+                                    trendValue={15.3}
+                                />
+                            </Grid>
+                        </Grid>
                     </Grid>
 
-                    {/* Payment Methods Distribution */}
-                    <Grid item xs={12} md={4}>
-                        <Paper sx={{ p: 3, height: 400 }}>
-                            <Typography variant="h6" gutterBottom>
-                                Payment Methods
-                            </Typography>
-                            <ResponsiveContainer width="100%" height="70%">
-                                <PieChart>
-                                    <Pie
-                                        data={analytics.paymentMethods}
-                                        innerRadius={60}
-                                        outerRadius={100}
-                                        paddingAngle={5}
-                                        dataKey="value"
-                                    >
-                                        {analytics.paymentMethods.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                    {/* Charts Row - Combined chart and Payment Methods */}
+                    <Grid item xs={12}>
+                        <Grid container spacing={3}>
+                            {/* Combined Chart Component - Takes 3/4 of space */}
+                            <Grid item xs={12} md={9}>
+                                <CombinedChartView 
+                                    selectedChart={selectedChart}
+                                    handleChartChange={handleChartChange}
+                                    analytics={analytics}
+                                />
+                            </Grid>
+                            
+                            {/* Payment Methods Distribution */}
+                            <Grid item xs={12} md={3}>
+                                <Paper sx={{ p: 2, height: 380, borderRadius: 2, boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+                                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>
+                                        Payment Methods
+                                    </Typography>
+                                    <ResponsiveContainer width="100%" height={180}>
+                                        <PieChart>
+                                            <Pie
+                                                data={analytics.paymentMethods}
+                                                innerRadius={40}
+                                                outerRadius={60}
+                                                paddingAngle={5}
+                                                dataKey="value"
+                                            >
+                                                {analytics.paymentMethods.map((entry, index) => (
+                                                    <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip formatter={(value, name) => [`${value}%`, name]} />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                    <Box sx={{ mt: 1 }}>
+                                        {analytics.paymentMethods.map((method, index) => (
+                                            <Box key={method.name} sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                    <Box
+                                                        sx={{
+                                                            width: 10,
+                                                            height: 10,
+                                                            backgroundColor: CHART_COLORS[index],
+                                                            mr: 1,
+                                                            borderRadius: '50%'
+                                                        }}
+                                                    />
+                                                    <Typography variant="body2" fontSize="0.75rem">{method.name}</Typography>
+                                                </Box>
+                                                <Typography variant="body2" fontWeight="bold" fontSize="0.75rem">
+                                                    ${method.amount.toLocaleString()}
+                                                </Typography>
+                                            </Box>
                                         ))}
-                                    </Pie>
-                                    <Tooltip formatter={(value, name) => [`${value}%`, name]} />
-                                </PieChart>
-                            </ResponsiveContainer>
-                            <Box sx={{ mt: 2 }}>
-                                {analytics.paymentMethods.map((method, index) => (
-                                    <Box key={method.name} sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <Box
-                                                sx={{
-                                                    width: 12,
-                                                    height: 12,
-                                                    backgroundColor: CHART_COLORS[index],
-                                                    mr: 1,
-                                                    borderRadius: '50%'
-                                                }}
-                                            />
-                                            <Typography variant="body2">{method.name}</Typography>
-                                        </Box>
-                                        <Typography variant="body2" fontWeight="bold">
-                                            ${method.amount.toLocaleString()}
-                                        </Typography>
                                     </Box>
-                                ))}
-                            </Box>
-                        </Paper>
+                                </Paper>
+                            </Grid>
+                        </Grid>
                     </Grid>
 
-                    {/* Hourly Transaction Patterns */}
-                    <Grid item xs={12} md={8}>
-                        <Paper sx={{ p: 3, height: 350 }}>
-                            <Typography variant="h6" gutterBottom>
-                                Hourly Transaction Patterns
-                            </Typography>
-                            <ResponsiveContainer width="100%" height="90%">
-                                <BarChart data={analytics.transactionTrends}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="time" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Bar dataKey="count" fill="#00C49F" radius={[4, 4, 0, 0]} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </Paper>
-                    </Grid>
-
-                    {/* Top Selling Products */}
-                    <Grid item xs={12} md={4}>
-                        <Paper sx={{ p: 3, height: 350 }}>
-                            <Typography variant="h6" gutterBottom>
+                    <Grid item xs={12} md={6}>
+                        <Paper sx={{ p: 3, height: 350, borderRadius: 2, boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+                            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
                                 Top Selling Products
                             </Typography>
                             <Box sx={{ maxHeight: 280, overflow: 'auto' }}>
                                 {analytics.topSellingProducts.map((product, index) => (
-                                    <Card key={product.name} sx={{ mb: 2, backgroundColor: '#f5f5f5' }}>
-                                        <CardContent sx={{ py: 2 }}>
+                                    <Card key={product.name} sx={{ mb: 2, backgroundColor: '#f9f9f9', borderRadius: 1 }}>
+                                        <CardContent sx={{ py: 1.5 }}>
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <Box>
                                                     <Typography variant="body1" fontWeight="bold">
@@ -397,41 +466,21 @@ const Dashboard = () => {
                         </Paper>
                     </Grid>
 
-                    {/* Weekly Performance */}
-                    <Grid item xs={12} md={6}>
-                        <Paper sx={{ p: 3, height: 350 }}>
-                            <Typography variant="h6" gutterBottom>
-                                Weekly Performance
-                            </Typography>
-                            <ResponsiveContainer width="100%" height="90%">
-                                <LineChart data={analytics.weeklyPerformance}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="day" />
-                                    <YAxis yAxisId="left" />
-                                    <YAxis yAxisId="right" orientation="right" />
-                                    <Tooltip />
-                                    <Bar yAxisId="left" dataKey="transactions" fill="#8884d8" />
-                                    <Line yAxisId="right" type="monotone" dataKey="revenue" stroke="#ff7300" strokeWidth={3} />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </Paper>
-                    </Grid>
-
-                    {/* Recent Transactions */}
-                    <Grid item xs={12} md={6}>
-                        <Paper sx={{ p: 3, height: 350 }}>
-                            <Typography variant="h6" gutterBottom>
+                    {/* Recent Transactions - Full Width */}
+                    <Grid item xs={12}>
+                        <Paper sx={{ p: 3, borderRadius: 2, boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+                            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
                                 Recent Transactions
                             </Typography>
-                            <TableContainer sx={{ maxHeight: 280 }}>
-                                <Table stickyHeader size="small">
+                            <TableContainer>
+                                <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Transaction ID</TableCell>
-                                            <TableCell align="right">Amount</TableCell>
-                                            <TableCell align="center">Items</TableCell>
-                                            <TableCell align="center">Time</TableCell>
-                                            <TableCell align="center">Payment</TableCell>
+                                            <TableCell sx={{ fontWeight: 'bold' }}>Transaction ID</TableCell>
+                                            <TableCell align="right" sx={{ fontWeight: 'bold' }}>Amount</TableCell>
+                                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Items</TableCell>
+                                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Time</TableCell>
+                                            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Payment Method</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -452,6 +501,7 @@ const Dashboard = () => {
                                                         label={transaction.items} 
                                                         size="small" 
                                                         color="default"
+                                                        sx={{ minWidth: 30 }}
                                                     />
                                                 </TableCell>
                                                 <TableCell align="center">
